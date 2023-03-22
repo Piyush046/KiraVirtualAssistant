@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import webbrowser
+from AppOpener import open
 from tkinter import font
 from tkinter import ttk
 import speech_recognition as sr
@@ -13,13 +14,14 @@ from tkVideoPlayer import TkinterVideo
 #Pygame music library---------------------------------------------------------------------------------
 
 pygame.mixer.init() 
-pygame.mixer.music.load("2.mp3")
+pygame.mixer.music.load("music.mp3")
 pygame.mixer.music.play(-1)
 
 
 
 #Translation function-------------------------------------------------------------------------------
 def trans():
+    global tras_pg
     tras_pg=Tk() 
     tras_pg.title("Translator!!")
     tras_pg.geometry("925x500")
@@ -28,27 +30,33 @@ def trans():
     #heading Of language translator---------------------------------------------------------------------------
 
     Label(tras_pg, text = "LANGUAGE TRANSLATOR", font = "arial 20 bold", fg='blue', bg='white smoke').pack()
-    Label(tras_pg,text ="It’s going to be interesting to see .”", fg='blue',font = 'arial 10 bold', bg ='white smoke' , width = '200').pack(side = 'bottom')
+    Label(tras_pg,text ="It’s going to be interesting to see how society deals with artificial intelligence, but it will definitely be cool.”", fg='blue',font = 'arial 10 bold', bg ='white smoke' , width = '200').pack(side = 'bottom')
     
     #INPUT AND OUTPUT TEXT WIDGET-------------------------------------------------------------------------
     Label(tras_pg,text="Enter Text", font = 'arial 13 bold', bg ='white smoke').place(x=200,y=60)
+    
+    global Input_text
     Input_text = Text(tras_pg,font = 'arial 10', height = 11, wrap = WORD, padx=5, pady=5, width = 60)
     Input_text.place(x=30,y = 100)  
   
     Label(tras_pg,text ="Output", font = 'arial 13 bold', bg ='white smoke').place(x=600,y=60)
+    global Output_text
     Output_text = Text(tras_pg,font = 'arial 10', height = 11, wrap = WORD, padx=5, pady= 5, width =60)
     Output_text.place(x = 500 , y = 100)
 
     language = list(LANGUAGES.values())
 
+    global src_lang
     src_lang = ttk.Combobox(tras_pg, values= language, width =22)
     src_lang.place(x=20,y=60)
     src_lang.set('choose input language')
 
+    global dest_lang
     dest_lang = ttk.Combobox(tras_pg, values= language, width =22)
     dest_lang.place(x=700,y=60)
     dest_lang.set('choose output language')
 
+   
 
 
 
@@ -58,11 +66,12 @@ def trans():
         Output_text.delete(1.0, END)
         Output_text.insert(END, translated.text)
     
-
+   
     trans_btn = Button(tras_pg, text = 'Translate',font = 'arial 12 bold',pady = 5,command = Translate , bg = 'royal blue1', activebackground = 'sky blue')
     trans_btn.place(x = 450, y = 380)
     tras_pg.mainloop()
  
+
 
 
 
@@ -91,7 +100,7 @@ def Speech2Text ():
                     text = self.recognizer.recognize_google(audio)
                     self.text.insert(END, '\n'+text+"\n")
                     #save file 
-                    with open("speech_to_text.txt", "a") as file:
+                    with open("text2.txt", "a") as file:
                         file.write(text+'\n')
                         self.text.insert(END, "\nText saved to file successfully!")
 
@@ -134,11 +143,15 @@ def cmd ():
                         webbrowser.open_new("https://"+text)
                     elif text== "google.com":
                         webbrowser.open_new("https://"+text)
+                     
+                      
                     elif text== "wikipedia.com":
                         webbrowser.open_new("https://"+text)
                     else:
-                       
                         webbrowser.open_new("https://www.google.com/search?q="+text)
+                        open(text)
+                         
+                        
                    
                 except sr.UnknownValueError:
                     self.text.insert(END, "\n Sorry, I couldn't understand what you said.")
@@ -190,10 +203,10 @@ def music():
 
 
 frame=Frame(win,width=350, height=350, bg="white")
-
+ 
 frame.place(x=500,y=70)
 
-frame_txt=Frame(win,width=350, height=60, bg="blue")
+frame_txt=Frame(win,width=350, height=60, bg="white")
 
 frame_txt.place(x=500,y=350)
 l1=Label(text="Developed By Piyush Pandey ").pack()
